@@ -4,6 +4,8 @@ const app = express();
 const session = require("express-session");
 const massive = require("massive");
 
+app.use(express.static(__dirname + "/../build"))
+
 const {register, login, logout, userSession} = require('./controller/userController');
 
 let { CONNECTION_STRING, SESSION_SECRET, SERVER_PORT } = process.env;

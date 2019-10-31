@@ -1,26 +1,76 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.png";
+import {connect} from 'react-redux';
+import {setUser} from './ducks/reducer';
+import { Switch, NavLink, Route, withRouter } from "react-router-dom";
+import AuthComponent from "./components/AuthComponent";
+import Profile from "./components/Profile";
+import axios from 'axios';
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <header>
+          <div>
+            <div>
+              <img src={logo} alt="logo" />
+            </div>
+            <nav>
+              <NavLink activeClassName="active" exact to="/">
+                Home
+              </NavLink>
+              <NavLink activeClassName="active" to="/store">
+                Store
+              </NavLink>
+              <NavLink activeClassName="active" to="/profile">
+                Profile
+              </NavLink>
+              {this.props.user && <button onClick={() => {
+                axios.delete('/auth/logout').then(()=> {
+                  this.props.setUser(null);
+                })
+              }}>Log Out</button>}
+            </nav>
+          </div>
+        </header>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            component={AuthComponent}
+          />
+          <Route
+            path="/store"
+            render={() => {
+              return <div>Store</div>;
+            }}
+          />
+          <Route
+            path="/profile"
+            component={Profile}
+          />
+          <Route
+            path="*"
+            render={() => {
+              return <div>GET THAT SPOOKY BUTT OUTTA HERE</div>;
+            }}
+          />
+        </Switch>
+      </div>
+    );
+  }
 }
 
-export default App;
+function mapReduxStateToProps(reduxState) {
+  return reduxState
+}
+
+const mapDispatchToProps = {
+  setUser
+}
+const invokedConnect = connect(mapReduxStateToProps, mapDispatchToProps);
+
+export default invokedConnect(withRouter(App));
+
