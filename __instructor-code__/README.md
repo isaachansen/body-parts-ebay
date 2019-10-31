@@ -1,65 +1,70 @@
 # Body Parts Ebay
 
-## Frontend (React)
+## frontend (React)
 
+## backend (Express)
 
+### dependecies
 
-## Backend (Express)
-
-### Dependencies
 - express
 - massive
 - dotenv
 - express-session
 - bcrypt
 
-### Server File Structure
-- db
+### server file structure
+
+- db/
 - server/
-    - index.js
-    - controller/ 
-        - userController.js
-        - inventoryController.js
-    - middleware/
-        - sessionCheck.js
+  - index.js
+  - controller/
+    - userContoller.js
+    - inventoryController.js
+  - middleware/
+    - sessionCheck.js
 
-### Endpoints
+### enpoints
 
-**Auth**
-- userSession: => get => /api/session
-- Register: => /auth/register
-- login: => /auth/login
+**User/auth**
+
+- userSession: => get => /auth/session
+- register: => /auth/register
 - logout: => /auth/logout
+- login: => /auth/login
 
 - addToCart: => post => /api/add_to_cart
-- getCart : => get => /api/get_cart
+- getCart: => get => /api/get_cart
 - deleteFromCart: => delete => /api/delete_from_cart/:id
 - updateEmail: => put => /api/update_email
-- getPurchaseHistory: => /api/purchase_history
+- getPurchaseHistory => /api/purchase_history/:id
 
-**Inventory**
-- showAllInventory: => get => /api/inventory
+**inventory**
 
-### Secrets
+- showAllInventory => get => /api/inventory
+
+### secrets
+
 ```text
 CONNECTION_STRING=
 SESSION_SECRET=
 SERVER_PORT=
 ```
 
-## Database (Postgres)
+## database (PostgreSQL)
 
-- user table
+- User Table
+
 ```sql
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
-    username TEXT UNIQUE,
+    username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL
-)
+);
 ```
 
-- body parts inventory table
+- Body Parts Inventory Table
+
 ```sql
 CREATE TABLE inventory (
     part_id SERIAL PRIMARY KEY,
@@ -69,16 +74,16 @@ CREATE TABLE inventory (
     image TEXT NOT NULL
 )
 ```
-- purchase history
+
+- purchase_history
+
 ```sql
 CREATE TABLE purchase_history (
     purchase_id SERIAL PRIMARY KEY,
     purchase_date DATE DEFAULT NOW(),
-    user_id INTEGER REFERENCES users(user_id)
+    user_id INTEGER REFERENCES users(user_id),
     part_id INTEGER REFERENCES inventory(part_id)
-)
+);
 ```
-- admin table
-```sql
-    ICE BOX
-```
+
+- Admin Table (icebox)
